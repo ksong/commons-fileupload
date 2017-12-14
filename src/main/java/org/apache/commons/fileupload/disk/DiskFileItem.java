@@ -152,12 +152,6 @@ public class DiskFileItem
      */
     private FileItemHeaders headers;
 
-    /**
-     * Default content charset to be used when no explicit charset
-     * parameter is provided by the sender.
-     */
-    private String defaultCharset = DEFAULT_CHARSET;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -344,7 +338,7 @@ public class DiskFileItem
         byte[] rawdata = get();
         String charset = getCharSet();
         if (charset == null) {
-            charset = defaultCharset;
+            charset = DEFAULT_CHARSET;
         }
         try {
             return new String(rawdata, charset);
@@ -415,7 +409,7 @@ public class DiskFileItem
     public void delete() {
         cachedContent = null;
         File outputFile = getStoreLocation();
-        if (outputFile != null && !isInMemory() && outputFile.exists()) {
+        if (outputFile != null && outputFile.exists()) {
             outputFile.delete();
         }
     }
@@ -482,7 +476,7 @@ public class DiskFileItem
      *
      * @throws IOException if an error occurs.
      */
-    public OutputStream getOutputStream() 
+    public OutputStream getOutputStream()
         throws IOException {
         if (dfos == null) {
             File outputFile = getTempFile();
@@ -523,7 +517,7 @@ public class DiskFileItem
      */
     @Override
     protected void finalize() {
-        if (dfos == null || dfos.isInMemory()) {
+        if (dfos == null) {
             return;
         }
         File outputFile = dfos.getFile();
@@ -607,21 +601,4 @@ public class DiskFileItem
         headers = pHeaders;
     }
 
-    /**
-     * Returns the default charset for use when no explicit charset
-     * parameter is provided by the sender.
-     * @return the default charset
-     */
-    public String getDefaultCharset() {
-        return defaultCharset;
-    }
-
-    /**
-     * Sets the default charset for use when no explicit charset
-     * parameter is provided by the sender.
-     * @param charset the default charset
-     */
-    public void setDefaultCharset(String charset) {
-        defaultCharset = charset;
-    }
 }

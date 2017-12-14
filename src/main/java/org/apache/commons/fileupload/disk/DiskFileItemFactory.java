@@ -95,12 +95,6 @@ public class DiskFileItemFactory implements FileItemFactory {
      */
     private FileCleaningTracker fileCleaningTracker;
 
-    /**
-     * Default content charset to be used when no explicit charset
-     * parameter is provided by the sender.
-     */
-    private String defaultCharset = DiskFileItem.DEFAULT_CHARSET;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -198,7 +192,6 @@ public class DiskFileItemFactory implements FileItemFactory {
             boolean isFormField, String fileName) {
         DiskFileItem result = new DiskFileItem(fieldName, contentType,
                 isFormField, fileName, sizeThreshold, repository);
-        result.setDefaultCharset(defaultCharset);
         FileCleaningTracker tracker = getFileCleaningTracker();
         if (tracker != null) {
             tracker.track(result.getTempFile(), result);
@@ -229,21 +222,4 @@ public class DiskFileItemFactory implements FileItemFactory {
         fileCleaningTracker = pTracker;
     }
 
-    /**
-     * Returns the default charset for use when no explicit charset
-     * parameter is provided by the sender.
-     * @return the default charset
-     */
-    public String getDefaultCharset() {
-        return defaultCharset;
-    }
-
-    /**
-     * Sets the default charset for use when no explicit charset
-     * parameter is provided by the sender.
-     * @param pCharset the default charset
-     */
-    public void setDefaultCharset(String pCharset) {
-        defaultCharset = pCharset;
-    }
 }
